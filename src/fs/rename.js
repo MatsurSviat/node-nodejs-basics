@@ -8,7 +8,7 @@ const originalFileUrl = getAbsUrl(`${FILES_PATH}/${ORIGINAL_FILE_NAME}`);
 const newFileUrl = getAbsUrl(`${FILES_PATH}/${NEW_FILE_NAME}`);
 
 const rename = async () => {
-  if (await exists(newFileUrl)) {
+  if (await exists(newFileUrl) || !(await exists(originalFileUrl))) {
     throw Error(ERROR_MSG);
   } else {
     await renameFile(originalFileUrl, newFileUrl);

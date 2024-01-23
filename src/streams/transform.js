@@ -1,15 +1,17 @@
 import { Transform } from "stream";
 import { pipeline } from "stream/promises";
 
-const transform = async () => {
-  const reverseString = (str) => str.split("").reverse().join("");
-  const transform = new Transform({
-    transform(chunk, encoding, callback) {
-      callback(null, reverseString(chunk.toString()));
-    },
-  });
+const reverseString = (str) => str.split("").reverse().join("");
+class MyTransformStream extends Transform {
+  _transform(chunk, encoding, callback) {
+    callback(null, reverseString(chunk.toString()));
+  }
+}
 
-  await pipeline(process.stdin, transform, process.stdout);
+const transform = async () => {
+  const transformStream = new MyTransformStream();
+
+  await pipeline(process.stdin, transformStream, process.stdout);
 };
 
 await transform();
